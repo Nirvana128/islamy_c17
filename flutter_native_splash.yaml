@@ -1,0 +1,15 @@
+# flutter_native_splash-development.yaml
+flutter_native_splash:
+  image: assets/PNG Images/splash.png
+  branding: assets/PNG Images/branding.png
+  image_dark: assets/PNG Images/splash.png
+  color: "#202020"
+  android: true
+  ios: true
+  android_12:
+    image: assets/PNG Images/splash.png
+    image_dark: assets/PNG Images/splash.png
+    branding: assets/PNG Images/branding.png
+#    branding_dark: assets/branding-development.png
+
+  web: false
