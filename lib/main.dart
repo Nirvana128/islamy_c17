@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'screens/splash_screen.dart';
+import 'screens/intro_screen.dart';
+import 'screens/home_screen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -9,6 +12,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(debugShowCheckedModeBanner : false);
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      initialRoute: SplashScreen.routeName,
+      routes: {
+        SplashScreen.routeName: (context) => const SplashScreen(),
+        IntroScreen.routeName: (context) => const IntroScreen(),
+        HomeScreen.routeName: (context) => const HomeScreen(),
+      },
+    );
   }
 }

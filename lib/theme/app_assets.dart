@@ -1,0 +1,10 @@
+class AppAssets {
+  static const String basePath = "assets/PNG Images/";
+  static const String background = "${basePath}Backgroundtaj.png";
+  static const String iconQuran = "${basePath}icon_quran.png";
+  static const String iconHadeth = "${basePath}icon_hadeth.png";
+  static const String iconSebha = "${basePath}icon_sebha.png";
+  static const String iconRadio = "${basePath}icon_radio.png";
+  static const String iconTime = "${basePath}icon_time.png";
+  static const String logo = "${basePath}logo.png";
+}
