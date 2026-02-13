@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:islamy1/screens/sebha_tab/sebha_tab.dart';
 import '../theme/app_assets.dart';
 import '../theme/app_colors.dart';
 import 'quran_tab/quran_tab.dart';
@@ -19,14 +20,15 @@ class _HomeScreenState extends State<HomeScreen> {
   List<String> backgroundImages = [
     AppAssets.background,
     AppAssets.background,
-    AppAssets.background,
+    AppAssets.backgroundsebha,
     AppAssets.background,
     AppAssets.background,
   ];
+
   List<Widget> tabs = [
     const QuranTab(),
     const HadethTab(),
-    const Center(child: Text("Sebha Screen", style: TextStyle(color: Colors.white))),
+    const SebhaTab(),
     const Center(child: Text("Radio Screen", style: TextStyle(color: Colors.white))),
     const Center(child: Text("Time Screen", style: TextStyle(color: Colors.white))),
   ];
@@ -49,6 +51,11 @@ class _HomeScreenState extends State<HomeScreen> {
             height: double.infinity,
             fit: BoxFit.cover,
           ),
+        ),
+        Container(
+          width: double.infinity,
+          height: double.infinity,
+          color: Colors.black.withOpacity(0.7),
         ),
 
         Scaffold(

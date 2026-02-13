@@ -68,6 +68,7 @@ flutter:
       - assets/Fonts/
       - assets/Suras/
       - assets/Hadeeth/
+      - assets/azkar.json
   fonts:
     - family: Janna
       fonts:
