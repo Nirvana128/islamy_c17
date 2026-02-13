@@ -1,6 +1,7 @@
 class AppAssets {
   static const String basePath = "assets/PNG Images/";
   static const String background = "${basePath}taj-mahal-agra-india.jpg";
+  static const String backgroundradio = "${basePath}silhouette-woman-reading-quran.jpg";
   static const String backgroundsebha = "${basePath}close-up-islamic-new-year-with-quran-books.jpg";
   static const String iconQuran = "${basePath}icon_quran.png";
   static const String iconHadeth = "${basePath}icon_hadeth.png";

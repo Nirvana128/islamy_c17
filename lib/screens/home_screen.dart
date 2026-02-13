@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:islamy1/screens/sebha_tab/sebha_tab.dart';
+import 'package:islamy1/screens/radio_tab/radio_tab.dart';
 import '../theme/app_assets.dart';
 import '../theme/app_colors.dart';
 import 'quran_tab/quran_tab.dart';
 import 'hadeeth_tab/hadeth_tab.dart';
+
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = "home_screen";
@@ -21,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
     AppAssets.background,
     AppAssets.background,
     AppAssets.backgroundsebha,
-    AppAssets.background,
+    AppAssets.backgroundradio,
     AppAssets.background,
   ];
 
@@ -29,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const QuranTab(),
     const HadethTab(),
     const SebhaTab(),
-    const Center(child: Text("Radio Screen", style: TextStyle(color: Colors.white))),
+    const RadioTab(),
     const Center(child: Text("Time Screen", style: TextStyle(color: Colors.white))),
   ];
 
