@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../theme/app_assets.dart';
 import '../theme/app_colors.dart';
 import 'quran_tab/quran_tab.dart';
+import 'hadeeth_tab/hadeth_tab.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = "home_screen";
@@ -15,7 +16,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int selectedIndex = 0;
 
-  // قائمة الخلفيات
   List<String> backgroundImages = [
     AppAssets.background,
     AppAssets.background,
@@ -23,10 +23,9 @@ class _HomeScreenState extends State<HomeScreen> {
     AppAssets.background,
     AppAssets.background,
   ];
-
   List<Widget> tabs = [
-    const QuranTab(), // التاب الأول (تم إزالة اللوجو منه في الخطوة القادمة)
-    const Center(child: Text("Hadeth Screen", style: TextStyle(color: Colors.white))),
+    const QuranTab(),
+    const HadethTab(),
     const Center(child: Text("Sebha Screen", style: TextStyle(color: Colors.white))),
     const Center(child: Text("Radio Screen", style: TextStyle(color: Colors.white))),
     const Center(child: Text("Time Screen", style: TextStyle(color: Colors.white))),
@@ -34,11 +33,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size; // لجعل حجم اللوجو متجاوب
+    var size = MediaQuery.of(context).size;
 
     return Stack(
       children: [
-        // 1. الخلفية المتحركة
         AnimatedSwitcher(
           duration: const Duration(milliseconds: 500),
           transitionBuilder: (Widget child, Animation<double> animation) {
@@ -55,30 +53,25 @@ class _HomeScreenState extends State<HomeScreen> {
 
         Scaffold(
           backgroundColor: Colors.transparent,
-
-          // 2. الجسم الرئيسي (تم التعديل هنا)
           body: SafeArea(
             child: Column(
               children: [
-                // أ. اللوجو الثابت (Header)
                 Padding(
                   padding: const EdgeInsets.only(top: 10, bottom: 20),
                   child: Image.asset(
-                    AppAssets.logo, // تأكدي ان الصورة دي موجودة في Assets
-                    height: size.height * 0.15, // ارتفاع 15% من الشاشة
+                    AppAssets.logo,
+                    height: size.height * 0.15,
                     fit: BoxFit.contain,
                   ),
                 ),
 
-                // ب. المحتوى المتغير (التابات)
                 Expanded(
-                  child: tabs[selectedIndex], // Expanded عشان ياخد باقي المساحة
+                  child: tabs[selectedIndex],
                 ),
               ],
             ),
           ),
 
-          // 3. شريط التنقل السفلي (كما هو)
           bottomNavigationBar: Theme(
             data: Theme.of(context).copyWith(
               canvasColor: AppColors.primaryColor,
