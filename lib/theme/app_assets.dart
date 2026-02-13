@@ -6,5 +6,7 @@ class AppAssets {
   static const String iconSebha = "${basePath}icon_sebha.png";
   static const String iconRadio = "${basePath}icon_radio.png";
   static const String iconTime = "${basePath}icon_time.png";
+  static const String starIcon = "${basePath}number_frame.png";
+  static const String mostRecentImage = "${basePath}quranSura.png";
   static const String logo = "${basePath}logo.png";
 }
