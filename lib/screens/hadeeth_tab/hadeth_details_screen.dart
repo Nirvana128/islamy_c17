@@ -1,33 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import '../theme/app_colors.dart';
-import '../models/sura_model.dart';
+import '../../models/hadeth_model.dart';
+import '../../theme/app_colors.dart';
 
-class SuraDetailsScreen extends StatefulWidget {
-  static const String routeName = "sura_details";
+class HadethDetailsScreen extends StatelessWidget {
+  static const String routeName = "hadeth_details";
 
-  const SuraDetailsScreen({super.key});
-
-  @override
-  State<SuraDetailsScreen> createState() => _SuraDetailsScreenState();
-}
-
-class _SuraDetailsScreenState extends State<SuraDetailsScreen> {
-  List<String> verses = [];
+  const HadethDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var args = ModalRoute.of(context)?.settings.arguments as SuraModel;
-
-    if (verses.isEmpty) {
-      loadSuraFile(args.index);
-    }
+    var hadeth = ModalRoute.of(context)?.settings.arguments as HadethModel;
 
     return Scaffold(
       backgroundColor: const Color(0xFF202020),
       body: Stack(
         children: [
-
           Align(
             alignment: Alignment.bottomCenter,
             child: Image.asset(
@@ -42,16 +29,17 @@ class _SuraDetailsScreenState extends State<SuraDetailsScreen> {
             appBar: AppBar(
               backgroundColor: Colors.transparent,
               elevation: 0,
+              iconTheme: const IconThemeData(color: AppColors.primaryColor),
               centerTitle: true,
               title: Text(
-                args.suraNameEn,
+                hadeth.title,
                 style: const TextStyle(
                   color: AppColors.primaryColor,
                   fontFamily: 'Janna',
                   fontWeight: FontWeight.bold,
+                  fontSize: 20,
                 ),
               ),
-              iconTheme: const IconThemeData(color: AppColors.primaryColor),
             ),
             body: Column(
               children: [
@@ -60,62 +48,43 @@ class _SuraDetailsScreenState extends State<SuraDetailsScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Image.asset("assets/PNG Images/img_left_corner.png", height: 70),
+                      Image.asset("assets/PNG Images/img_left_corner.png", height: 90),
                       Text(
-                        args.suraNameAr,
+                        hadeth.title,
                         style: const TextStyle(
                           color: AppColors.primaryColor,
-                          fontSize: 28,
+                          fontSize: 24,
                           fontFamily: 'Janna',
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Image.asset("assets/PNG Images/img_right_corner.png", height: 70),
+                      Image.asset("assets/PNG Images/img_right_corner.png", height: 90),
                     ],
                   ),
                 ),
-
                 Expanded(
-                  child: verses.isEmpty
-                      ? const Center(child: CircularProgressIndicator(color: AppColors.primaryColor))
-                      : SingleChildScrollView(
-                    padding: const EdgeInsets.all(20),
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     child: Text(
-                      formatSuraText(),
+                      hadeth.content.join("\n"),
                       textAlign: TextAlign.center,
                       textDirection: TextDirection.rtl,
                       style: const TextStyle(
                         color: AppColors.primaryColor,
-                        fontSize: 22,
-                        fontFamily: 'Janna',
+                        fontSize: 20,
                         height: 2.0,
+                        fontFamily: 'Janna',
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 100),
+                const SizedBox(height: 80),
               ],
             ),
           ),
         ],
       ),
     );
-  }
-
-  void loadSuraFile(int index) async {
-    String content = await rootBundle.loadString("assets/Suras/${index + 1}.txt");
-    List<String> lines = content.trim().split("\n");
-
-    setState(() {
-      verses = lines;
-    });
-  }
-  String formatSuraText() {
-    String fullSura = "";
-    for (int i = 0; i < verses.length; i++) {
-      fullSura += "${verses[i]} [${i + 1}] ";
-    }
-    return fullSura;
   }
 }

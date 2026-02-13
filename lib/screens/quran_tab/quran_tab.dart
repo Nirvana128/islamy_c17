@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_assets.dart';
 import '../../models/sura_model.dart';
-import '../sura_details_screen.dart';
+import 'sura_details_screen.dart';
 
 class QuranTab extends StatefulWidget {
   const QuranTab({super.key});
@@ -13,11 +14,21 @@ class QuranTab extends StatefulWidget {
 
 class _QuranTabState extends State<QuranTab> {
   List<SuraModel> searchResults = [];
+  List<int> lastReadIndices = [];
 
   @override
   void initState() {
     super.initState();
     _loadAllSuras();
+    loadLastReads();
+  }
+  void loadLastReads() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> history = prefs.getStringList('readHistory') ?? [];
+
+    setState(() {
+      lastReadIndices = history.map((e) => int.parse(e)).toList();
+    });
   }
 
   void _loadAllSuras() {
@@ -87,23 +98,26 @@ class _QuranTabState extends State<QuranTab> {
               ),
             ),
           ),
-
-          if (searchResults.length == SuraModel.suraNamesAr.length) ...[
+          if (searchResults.length == SuraModel.suraNamesAr.length &&
+              lastReadIndices.isNotEmpty) ...[
             const SizedBox(height: 20),
             const Text(
               "Most Recently",
               style: TextStyle(
-                  color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold, fontFamily: 'Janna'),
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Janna'),
             ),
             const SizedBox(height: 10),
             SizedBox(
               height: 150,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemCount: 3,
+                itemCount: lastReadIndices.length,
                 separatorBuilder: (context, index) => const SizedBox(width: 10),
                 itemBuilder: (context, index) {
-                  return _buildRecentCard(context, index);
+                  return _buildRecentCard(context, lastReadIndices[index]);
                 },
               ),
             ),
@@ -113,20 +127,27 @@ class _QuranTabState extends State<QuranTab> {
           const Text(
             "Suras List",
             style: TextStyle(
-                color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold, fontFamily: 'Janna'),
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Janna'),
           ),
           const SizedBox(height: 10),
 
           Expanded(
             child: searchResults.isEmpty
-                ? const Center(child: Text("No Results Found", style: TextStyle(color: Colors.white, fontFamily: 'Janna')))
+                ? const Center(
+                child: Text("No Results Found",
+                    style: TextStyle(
+                        color: Colors.white, fontFamily: 'Janna')))
                 : ListView.separated(
               padding: EdgeInsets.zero,
               itemCount: searchResults.length,
               separatorBuilder: (context, index) => const Divider(
                   color: Colors.white30, indent: 40, endIndent: 40),
               itemBuilder: (context, index) {
-                return _buildFilteredSuraItem(context, searchResults[index]);
+                return _buildFilteredSuraItem(
+                    context, searchResults[index]);
               },
             ),
           ),
@@ -137,8 +158,10 @@ class _QuranTabState extends State<QuranTab> {
 
   Widget _buildFilteredSuraItem(BuildContext context, SuraModel sura) {
     return InkWell(
-      onTap: () {
-        Navigator.pushNamed(context, SuraDetailsScreen.routeName, arguments: sura);
+      onTap: () async {
+        await Navigator.pushNamed(context, SuraDetailsScreen.routeName,
+            arguments: sura);
+        loadLastReads();
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -148,8 +171,13 @@ class _QuranTabState extends State<QuranTab> {
               alignment: Alignment.center,
               children: [
                 Image.asset(AppAssets.starIcon, width: 50, height: 50),
-                Text("${sura.index + 1}",
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: 'Janna', fontSize: 16),
+                Text(
+                  "${sura.index + 1}",
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Janna',
+                      fontSize: 16),
                 ),
               ],
             ),
@@ -157,27 +185,47 @@ class _QuranTabState extends State<QuranTab> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(sura.suraNameEn, style: const TextStyle(color: Colors.white, fontSize: 20, fontFamily: 'Janna', fontWeight: FontWeight.bold)),
+                Text(sura.suraNameEn,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontFamily: 'Janna',
+                        fontWeight: FontWeight.bold)),
                 const SizedBox(height: 4),
-                Text("${sura.verses} Verses", style: const TextStyle(color: Colors.white70, fontSize: 14, fontWeight: FontWeight.bold, fontFamily: 'Janna')),
+                Text("${sura.verses} Verses",
+                    style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Janna')),
               ],
             ),
             const Spacer(),
-            Text(sura.suraNameAr, style: const TextStyle(color: Colors.white, fontSize: 20, fontFamily: 'Janna', fontWeight: FontWeight.bold)),
+            Text(sura.suraNameAr,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontFamily: 'Janna',
+                    fontWeight: FontWeight.bold)),
           ],
         ),
       ),
     );
   }
+
   Widget _buildRecentCard(BuildContext context, int index) {
     var sura = SuraModel.getSuraModel(index);
     return InkWell(
-      onTap: () {
-        Navigator.pushNamed(context, SuraDetailsScreen.routeName, arguments: sura);
+      onTap: () async {
+        await Navigator.pushNamed(context, SuraDetailsScreen.routeName,
+            arguments: sura);
+        loadLastReads();
       },
       child: Container(
         width: 285,
-        decoration: BoxDecoration(color: AppColors.primaryColor, borderRadius: BorderRadius.circular(20)),
+        decoration: BoxDecoration(
+            color: AppColors.primaryColor,
+            borderRadius: BorderRadius.circular(20)),
         child: Row(
           children: [
             Expanded(
@@ -187,14 +235,33 @@ class _QuranTabState extends State<QuranTab> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(sura.suraNameEn, style: const TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold, fontFamily: 'Janna')),
-                    Text(sura.suraNameAr, style: const TextStyle(color: Colors.black, fontSize: 24, fontFamily: 'Janna', fontWeight: FontWeight.bold)),
-                    Text("${sura.verses} Verses", style: const TextStyle(color: Colors.black87, fontSize: 14, fontWeight: FontWeight.bold, fontFamily: 'Janna')),
+                    Text(sura.suraNameEn,
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Janna')),
+                    Text(sura.suraNameAr,
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 24,
+                            fontFamily: 'Janna',
+                            fontWeight: FontWeight.bold)),
+                    Text("${sura.verses} Verses",
+                        style: const TextStyle(
+                            color: Colors.black87,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Janna')),
                   ],
                 ),
               ),
             ),
-            SizedBox(height: 150, width: 150, child: Image.asset(AppAssets.mostRecentImage, fit: BoxFit.contain)),
+            SizedBox(
+                height: 150,
+                width: 150,
+                child: Image.asset(AppAssets.mostRecentImage,
+                    fit: BoxFit.contain)),
           ],
         ),
       ),
