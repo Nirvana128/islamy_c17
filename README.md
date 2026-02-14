@@ -1,4 +1,4 @@
-#Islami App
+# Islami App
 
 **Islami** is a comprehensive Flutter application designed to assist Muslims in their daily spiritual routine. The app provides accurate prayer times, live Quran radio streaming, and a collection of daily Azkar, all wrapped in a modern and elegant user interface.
 
@@ -89,3 +89,4 @@ A brief overview of the main folders:
 ---
 
  **Star this repo if you find it useful!**
+
